@@ -1,0 +1,37 @@
+type Film {
+    id: ID!
+    title: String!
+    category: Category
+    actors: [Actor!]
+}
+
+type FilmPage {
+    totalCount: Int!
+    pageInfo: PageInfo!
+    edges: [FilmEdge!]!
+}
+
+type FilmEdge {
+    node: Film
+}
+
+type Category {
+    id: ID!
+    name: String!
+    lastUpdate: Time!
+}
+
+type Actor {
+    id: ID!
+    firstName: String!
+    lastName: String!
+    lastUpdate: Time!
+}
+
+extend type Query  {
+    films(first: Int! = 100, after: String): FilmPage!
+    category(id: ID!): Category!
+    categoryByFilmId(id: ID!): Category!
+    actor(id: ID!): Actor!
+    actorsByFilmId(id: ID!): [Actor!]
+}

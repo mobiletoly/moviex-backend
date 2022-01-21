@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option go_package = "github.com/mobiletoly/moviex-backend;rpcmoviex";
+
+package proto;
+
+// The user service definition.
+service User {
+  // Sends a greeting
+  rpc fetchUsers (FetchUsersRequest) returns (FetchUsersResponse);
+}
+
+// The request message containing the fetch users request parameters
+message FetchUsersRequest {
+  int32 numRecords = 1;
+  int32 firstRecord = 2;
+}
+
+// The response message containing user list
+message FetchUsersResponse {
+  repeated FetchUserResponse users = 1;
+  int32 totalRecords = 2;
+}
+
+// The response message containing user
+message FetchUserResponse {
+  int32 id = 1;
+  string email = 2;
+  string password = 3;
+}

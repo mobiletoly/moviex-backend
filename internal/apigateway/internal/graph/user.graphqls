@@ -1,0 +1,19 @@
+type User {
+    id: Int!
+    email: String!
+    password: String!
+}
+
+type UserPage {
+    totalCount: Int!
+    pageInfo: PageInfo!
+    edges: [UserEdge!]!
+}
+
+type UserEdge {
+    node: User
+}
+
+extend type Query  {
+    users(first: Int! = 100, after: String): UserPage!
+}

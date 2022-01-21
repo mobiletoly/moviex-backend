@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+option go_package = "github.com/mobiletoly/moviex-backend;rpcmoviex";
+
+package proto;
+
+// The film service definition.
+service Film {
+  rpc GetFilms (GetFilmsRequest) returns (GetFilmsResponse);
+  rpc GetCategory (GetCategoryRequest) returns (GetCategoryResponse);
+  rpc GetCategoryByFilmID (GetByFilmIdRequest) returns (GetCategoryResponse);
+  rpc GetActor (GetActorRequest) returns (GetActorResponse);
+  rpc GetActorsByFilmID (GetByFilmIdRequest) returns (GetActorsResponse);
+}
+
+message GetFilmsRequest {
+  int32 numRecords = 1;
+  int32 firstRecord = 2;
+  Filter filter = 3;
+
+  message Filter {
+    optional int32 releaseYear = 1;
+    optional int32 categoryId = 2;
+    repeated int32 actorIds = 3;
+    optional string rating = 4;
+  }
+}
+
+// The response message containing film list
+message GetFilmsResponse {
+  repeated GetFilmResponse films = 1;
+  int32 totalRecords = 2;
+}
+
+// The response message containing film
+message GetFilmResponse {
+  int32 id = 1;
+  string title = 2;
+  optional string description = 3;
+  uint32 releaseYear = 4;
+  int32 languageId = 5;
+  uint32 length = 6;
+  string rating = 7;
+  int64 updateTime = 8;
+  optional string specialFeatures = 9;
+}
+
+message GetCategoryRequest {
+  int32 id = 1;
+}
+
+message GetCategoryResponse {
+  int32 id = 1;
+  string name = 2;
+  int64 lastUpdate = 3;
+}
+
+message GetByFilmIdRequest {
+  int32 id = 1;
+}
+
+message GetActorRequest {
+  int32 id = 1;
+}
+
+message GetActorResponse {
+  int32 id = 1;
+  string firstName = 2;
+  string lastName = 3;
+  int64 lastUpdate = 4;
+}
+
+// The response message containing actors list
+message GetActorsResponse {
+  repeated GetActorResponse actors = 1;
+  int32 totalRecords = 2;
+}

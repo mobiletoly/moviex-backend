@@ -1,0 +1,18 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
+scalar Time
+
+type Query {
+    unusedQuery: String
+}
+
+type Mutation {
+    unusedMutation(input: String): String
+}
+
+type PageInfo {
+    hasNextPage: Boolean!     # if false, can disable next page button
+    endCursor: String         # used for getting next page
+}
