@@ -3,8 +3,8 @@ package usecase
 import (
 	"context"
 	"github.com/mobiletoly/moviex-backend/internal/apigateway/internal/core/app"
+	"github.com/mobiletoly/moviex-backend/internal/apigateway/internal/core/model"
 	"github.com/mobiletoly/moviex-backend/internal/apigateway/internal/core/outport"
-	"github.com/mobiletoly/moviex-backend/internal/apigateway/internal/graph/model"
 	"github.com/mobiletoly/moviex-backend/internal/common/service"
 )
 

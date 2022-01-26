@@ -12,7 +12,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/mobiletoly/moviex-backend/internal/apigateway/internal/graph/model"
+	"github.com/mobiletoly/moviex-backend/internal/apigateway/internal/core/model"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -1069,7 +1069,7 @@ func (ec *executionContext) _Film_category(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.(*model.Category)
 	fc.Result = res
-	return ec.marshalOCategory2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐCategory(ctx, field.Selections, res)
+	return ec.marshalOCategory2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐCategory(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Film_actors(ctx context.Context, field graphql.CollectedField, obj *model.Film) (ret graphql.Marshaler) {
@@ -1101,7 +1101,7 @@ func (ec *executionContext) _Film_actors(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.([]*model.Actor)
 	fc.Result = res
-	return ec.marshalOActor2ᚕᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐActorᚄ(ctx, field.Selections, res)
+	return ec.marshalOActor2ᚕᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐActorᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _FilmEdge_node(ctx context.Context, field graphql.CollectedField, obj *model.FilmEdge) (ret graphql.Marshaler) {
@@ -1133,7 +1133,7 @@ func (ec *executionContext) _FilmEdge_node(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.(*model.Film)
 	fc.Result = res
-	return ec.marshalOFilm2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐFilm(ctx, field.Selections, res)
+	return ec.marshalOFilm2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐFilm(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _FilmPage_totalCount(ctx context.Context, field graphql.CollectedField, obj *model.FilmPage) (ret graphql.Marshaler) {
@@ -1203,7 +1203,7 @@ func (ec *executionContext) _FilmPage_pageInfo(ctx context.Context, field graphq
 	}
 	res := resTmp.(*model.PageInfo)
 	fc.Result = res
-	return ec.marshalNPageInfo2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐPageInfo(ctx, field.Selections, res)
+	return ec.marshalNPageInfo2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐPageInfo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _FilmPage_edges(ctx context.Context, field graphql.CollectedField, obj *model.FilmPage) (ret graphql.Marshaler) {
@@ -1238,7 +1238,7 @@ func (ec *executionContext) _FilmPage_edges(ctx context.Context, field graphql.C
 	}
 	res := resTmp.([]*model.FilmEdge)
 	fc.Result = res
-	return ec.marshalNFilmEdge2ᚕᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐFilmEdgeᚄ(ctx, field.Selections, res)
+	return ec.marshalNFilmEdge2ᚕᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐFilmEdgeᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_unusedMutation(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -1418,7 +1418,7 @@ func (ec *executionContext) _Query_films(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.(*model.FilmPage)
 	fc.Result = res
-	return ec.marshalNFilmPage2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐFilmPage(ctx, field.Selections, res)
+	return ec.marshalNFilmPage2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐFilmPage(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_category(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -1460,7 +1460,7 @@ func (ec *executionContext) _Query_category(ctx context.Context, field graphql.C
 	}
 	res := resTmp.(*model.Category)
 	fc.Result = res
-	return ec.marshalNCategory2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐCategory(ctx, field.Selections, res)
+	return ec.marshalNCategory2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐCategory(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_categoryByFilmId(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -1502,7 +1502,7 @@ func (ec *executionContext) _Query_categoryByFilmId(ctx context.Context, field g
 	}
 	res := resTmp.(*model.Category)
 	fc.Result = res
-	return ec.marshalNCategory2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐCategory(ctx, field.Selections, res)
+	return ec.marshalNCategory2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐCategory(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_actor(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -1544,7 +1544,7 @@ func (ec *executionContext) _Query_actor(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.(*model.Actor)
 	fc.Result = res
-	return ec.marshalNActor2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐActor(ctx, field.Selections, res)
+	return ec.marshalNActor2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐActor(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_actorsByFilmId(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -1583,7 +1583,7 @@ func (ec *executionContext) _Query_actorsByFilmId(ctx context.Context, field gra
 	}
 	res := resTmp.([]*model.Actor)
 	fc.Result = res
-	return ec.marshalOActor2ᚕᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐActorᚄ(ctx, field.Selections, res)
+	return ec.marshalOActor2ᚕᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐActorᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_users(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -1625,7 +1625,7 @@ func (ec *executionContext) _Query_users(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.(*model.UserPage)
 	fc.Result = res
-	return ec.marshalNUserPage2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐUserPage(ctx, field.Selections, res)
+	return ec.marshalNUserPage2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐUserPage(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -1833,7 +1833,7 @@ func (ec *executionContext) _UserEdge_node(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalOUser2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalOUser2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserPage_totalCount(ctx context.Context, field graphql.CollectedField, obj *model.UserPage) (ret graphql.Marshaler) {
@@ -1903,7 +1903,7 @@ func (ec *executionContext) _UserPage_pageInfo(ctx context.Context, field graphq
 	}
 	res := resTmp.(*model.PageInfo)
 	fc.Result = res
-	return ec.marshalNPageInfo2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐPageInfo(ctx, field.Selections, res)
+	return ec.marshalNPageInfo2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐPageInfo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserPage_edges(ctx context.Context, field graphql.CollectedField, obj *model.UserPage) (ret graphql.Marshaler) {
@@ -1938,7 +1938,7 @@ func (ec *executionContext) _UserPage_edges(ctx context.Context, field graphql.C
 	}
 	res := resTmp.([]*model.UserEdge)
 	fc.Result = res
-	return ec.marshalNUserEdge2ᚕᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐUserEdgeᚄ(ctx, field.Selections, res)
+	return ec.marshalNUserEdge2ᚕᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐUserEdgeᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) ___Directive_name(ctx context.Context, field graphql.CollectedField, obj *introspection.Directive) (ret graphql.Marshaler) {
@@ -3792,11 +3792,11 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNActor2githubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐActor(ctx context.Context, sel ast.SelectionSet, v model.Actor) graphql.Marshaler {
+func (ec *executionContext) marshalNActor2githubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐActor(ctx context.Context, sel ast.SelectionSet, v model.Actor) graphql.Marshaler {
 	return ec._Actor(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNActor2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐActor(ctx context.Context, sel ast.SelectionSet, v *model.Actor) graphql.Marshaler {
+func (ec *executionContext) marshalNActor2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐActor(ctx context.Context, sel ast.SelectionSet, v *model.Actor) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -3821,11 +3821,11 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) marshalNCategory2githubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐCategory(ctx context.Context, sel ast.SelectionSet, v model.Category) graphql.Marshaler {
+func (ec *executionContext) marshalNCategory2githubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐCategory(ctx context.Context, sel ast.SelectionSet, v model.Category) graphql.Marshaler {
 	return ec._Category(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNCategory2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐCategory(ctx context.Context, sel ast.SelectionSet, v *model.Category) graphql.Marshaler {
+func (ec *executionContext) marshalNCategory2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐCategory(ctx context.Context, sel ast.SelectionSet, v *model.Category) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -3835,7 +3835,7 @@ func (ec *executionContext) marshalNCategory2ᚖgithubᚗcomᚋmobiletolyᚋmovi
 	return ec._Category(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNFilmEdge2ᚕᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐFilmEdgeᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.FilmEdge) graphql.Marshaler {
+func (ec *executionContext) marshalNFilmEdge2ᚕᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐFilmEdgeᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.FilmEdge) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -3859,7 +3859,7 @@ func (ec *executionContext) marshalNFilmEdge2ᚕᚖgithubᚗcomᚋmobiletolyᚋm
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNFilmEdge2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐFilmEdge(ctx, sel, v[i])
+			ret[i] = ec.marshalNFilmEdge2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐFilmEdge(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -3879,7 +3879,7 @@ func (ec *executionContext) marshalNFilmEdge2ᚕᚖgithubᚗcomᚋmobiletolyᚋm
 	return ret
 }
 
-func (ec *executionContext) marshalNFilmEdge2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐFilmEdge(ctx context.Context, sel ast.SelectionSet, v *model.FilmEdge) graphql.Marshaler {
+func (ec *executionContext) marshalNFilmEdge2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐFilmEdge(ctx context.Context, sel ast.SelectionSet, v *model.FilmEdge) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -3889,11 +3889,11 @@ func (ec *executionContext) marshalNFilmEdge2ᚖgithubᚗcomᚋmobiletolyᚋmovi
 	return ec._FilmEdge(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNFilmPage2githubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐFilmPage(ctx context.Context, sel ast.SelectionSet, v model.FilmPage) graphql.Marshaler {
+func (ec *executionContext) marshalNFilmPage2githubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐFilmPage(ctx context.Context, sel ast.SelectionSet, v model.FilmPage) graphql.Marshaler {
 	return ec._FilmPage(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNFilmPage2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐFilmPage(ctx context.Context, sel ast.SelectionSet, v *model.FilmPage) graphql.Marshaler {
+func (ec *executionContext) marshalNFilmPage2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐFilmPage(ctx context.Context, sel ast.SelectionSet, v *model.FilmPage) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -3933,7 +3933,7 @@ func (ec *executionContext) marshalNInt2int32(ctx context.Context, sel ast.Selec
 	return res
 }
 
-func (ec *executionContext) marshalNPageInfo2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐPageInfo(ctx context.Context, sel ast.SelectionSet, v *model.PageInfo) graphql.Marshaler {
+func (ec *executionContext) marshalNPageInfo2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐPageInfo(ctx context.Context, sel ast.SelectionSet, v *model.PageInfo) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -3973,7 +3973,7 @@ func (ec *executionContext) marshalNTime2int64(ctx context.Context, sel ast.Sele
 	return res
 }
 
-func (ec *executionContext) marshalNUserEdge2ᚕᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐUserEdgeᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.UserEdge) graphql.Marshaler {
+func (ec *executionContext) marshalNUserEdge2ᚕᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐUserEdgeᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.UserEdge) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -3997,7 +3997,7 @@ func (ec *executionContext) marshalNUserEdge2ᚕᚖgithubᚗcomᚋmobiletolyᚋm
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNUserEdge2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐUserEdge(ctx, sel, v[i])
+			ret[i] = ec.marshalNUserEdge2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐUserEdge(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -4017,7 +4017,7 @@ func (ec *executionContext) marshalNUserEdge2ᚕᚖgithubᚗcomᚋmobiletolyᚋm
 	return ret
 }
 
-func (ec *executionContext) marshalNUserEdge2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐUserEdge(ctx context.Context, sel ast.SelectionSet, v *model.UserEdge) graphql.Marshaler {
+func (ec *executionContext) marshalNUserEdge2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐUserEdge(ctx context.Context, sel ast.SelectionSet, v *model.UserEdge) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -4027,11 +4027,11 @@ func (ec *executionContext) marshalNUserEdge2ᚖgithubᚗcomᚋmobiletolyᚋmovi
 	return ec._UserEdge(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNUserPage2githubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐUserPage(ctx context.Context, sel ast.SelectionSet, v model.UserPage) graphql.Marshaler {
+func (ec *executionContext) marshalNUserPage2githubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐUserPage(ctx context.Context, sel ast.SelectionSet, v model.UserPage) graphql.Marshaler {
 	return ec._UserPage(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNUserPage2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐUserPage(ctx context.Context, sel ast.SelectionSet, v *model.UserPage) graphql.Marshaler {
+func (ec *executionContext) marshalNUserPage2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐUserPage(ctx context.Context, sel ast.SelectionSet, v *model.UserPage) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -4298,7 +4298,7 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 	return res
 }
 
-func (ec *executionContext) marshalOActor2ᚕᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐActorᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Actor) graphql.Marshaler {
+func (ec *executionContext) marshalOActor2ᚕᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐActorᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Actor) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -4325,7 +4325,7 @@ func (ec *executionContext) marshalOActor2ᚕᚖgithubᚗcomᚋmobiletolyᚋmovi
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNActor2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐActor(ctx, sel, v[i])
+			ret[i] = ec.marshalNActor2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐActor(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -4369,14 +4369,14 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return graphql.MarshalBoolean(*v)
 }
 
-func (ec *executionContext) marshalOCategory2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐCategory(ctx context.Context, sel ast.SelectionSet, v *model.Category) graphql.Marshaler {
+func (ec *executionContext) marshalOCategory2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐCategory(ctx context.Context, sel ast.SelectionSet, v *model.Category) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Category(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOFilm2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐFilm(ctx context.Context, sel ast.SelectionSet, v *model.Film) graphql.Marshaler {
+func (ec *executionContext) marshalOFilm2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐFilm(ctx context.Context, sel ast.SelectionSet, v *model.Film) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -4407,7 +4407,7 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	return graphql.MarshalString(*v)
 }
 
-func (ec *executionContext) marshalOUser2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
+func (ec *executionContext) marshalOUser2ᚖgithubᚗcomᚋmobiletolyᚋmoviexᚑbackendᚋinternalᚋapigatewayᚋinternalᚋcoreᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

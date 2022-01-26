@@ -1,7 +1,7 @@
 package mapper
 
 import (
-	"github.com/mobiletoly/moviex-backend/internal/apigateway/internal/graph/model"
+	"github.com/mobiletoly/moviex-backend/internal/apigateway/internal/core/model"
 	pb "github.com/mobiletoly/moviex-backend/internal/proto"
 )
 

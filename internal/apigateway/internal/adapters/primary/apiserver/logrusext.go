@@ -29,8 +29,6 @@ func (n LogrusExtension) Validate(_ graphql.ExecutableSchema) error {
 func (n LogrusExtension) InterceptField(ctx context.Context, next graphql.Resolver) (interface{}, error) {
 	oc := graphql.GetOperationContext(ctx)
 	fc := graphql.GetFieldContext(ctx)
-
-	// TODO: get request ID from request context (gin middleware?)
 	ctxLogger := n.Logger.WithFields(logrus.Fields{
 		"reqId":     requestid.GetFromContext(ctx),
 		"operation": oc.OperationName,

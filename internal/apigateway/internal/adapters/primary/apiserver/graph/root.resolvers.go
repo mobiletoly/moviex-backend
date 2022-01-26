@@ -7,7 +7,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/mobiletoly/moviex-backend/internal/apigateway/internal/graph/generated"
+	"github.com/mobiletoly/moviex-backend/internal/apigateway/internal/adapters/primary/apiserver/generated"
 )
 
 func (r *mutationResolver) UnusedMutation(ctx context.Context, input *string) (*string, error) {

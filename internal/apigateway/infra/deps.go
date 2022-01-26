@@ -8,6 +8,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// WireDependencies provides entry point to wire dependencies together for further dependency injection
 func WireDependencies(cfg *app.Config) *di.DI {
 	filmAdapter, err := remoting.NewFilmAdapter(cfg)
 	if err != nil {

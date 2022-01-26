@@ -2,6 +2,6 @@ database:
     host: 127.0.0.1
     port: 5432
     name: moviex
-    user:
-    password:
+    user: _
+    password: _
     sslmode: disable

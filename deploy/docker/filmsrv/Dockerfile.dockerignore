@@ -1,0 +1,17 @@
+/.git
+/deploy
+/configs/apigateway
+/configs/usersrv
+
+/cmd/apigateway
+/cmd/usersrv
+/internal/apigateway
+/internal/usersrv
+
+/.idea
+*.iml
+
+# Exclude executable files
+/apigateway
+/filmsrv
+/usersrv

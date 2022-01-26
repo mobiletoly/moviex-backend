@@ -8,6 +8,8 @@ import (
 
 var ridKey = struct{}{}
 
+const xRequestIDHeaderName = "X-Request-ID"
+
 // GetFromContext returns the request id from context
 func GetFromContext(ctx context.Context) string {
 	rid := ctx.Value(ridKey).(string)
@@ -19,10 +21,10 @@ func GetFromContext(ctx context.Context) string {
 // request id. Otherwise, generates a new unique ID.
 func HTTPHandler(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		rid := r.Header.Get("X-Request-ID")
+		rid := r.Header.Get(xRequestIDHeaderName)
 		if rid == "" {
 			rid = uuid.New().String()
-			r.Header.Set("X-Request-ID", rid)
+			r.Header.Set(xRequestIDHeaderName, rid)
 		}
 		ctx := newRequestIDContext(r.Context(), rid)
 		h.ServeHTTP(w, r.WithContext(ctx))

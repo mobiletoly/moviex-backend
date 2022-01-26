@@ -1,0 +1,17 @@
+/.git
+/deploy
+/configs/filmsrv
+/configs/usersrv
+
+/cmd/filmsrv
+/cmd/usersrv
+/internal/filmsrv
+/internal/usersrv
+
+/.idea
+*.iml
+
+# Exclude executable files
+/apigateway
+/filmsrv
+/usersrv

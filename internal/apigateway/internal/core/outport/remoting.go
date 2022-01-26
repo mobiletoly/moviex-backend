@@ -2,7 +2,7 @@ package outport
 
 import (
 	"context"
-	"github.com/mobiletoly/moviex-backend/internal/apigateway/internal/graph/model"
+	"github.com/mobiletoly/moviex-backend/internal/apigateway/internal/core/model"
 )
 
 type FilmRemoting interface {

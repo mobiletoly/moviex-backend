@@ -5,8 +5,7 @@ package graph
 
 import (
 	"context"
-
-	"github.com/mobiletoly/moviex-backend/internal/apigateway/internal/graph/model"
+	"github.com/mobiletoly/moviex-backend/internal/apigateway/internal/core/model"
 )
 
 func (r *queryResolver) Users(ctx context.Context, first int32, after *string) (*model.UserPage, error) {

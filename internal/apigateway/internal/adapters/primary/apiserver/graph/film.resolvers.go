@@ -5,8 +5,8 @@ package graph
 
 import (
 	"context"
-	"github.com/mobiletoly/moviex-backend/internal/apigateway/internal/graph/generated"
-	"github.com/mobiletoly/moviex-backend/internal/apigateway/internal/graph/model"
+	"github.com/mobiletoly/moviex-backend/internal/apigateway/internal/adapters/primary/apiserver/generated"
+	"github.com/mobiletoly/moviex-backend/internal/apigateway/internal/core/model"
 )
 
 func (r *filmResolver) Category(ctx context.Context, obj *model.Film) (*model.Category, error) {
@@ -38,7 +38,7 @@ func (r *queryResolver) ActorsByFilmID(ctx context.Context, id string) ([]*model
 	return r.DI.FilmUseCase.FetchActorsByFilmID(ctx, id)
 }
 
-// Film returns generated.FilmResolver implementation.
+// Film returns generated1.FilmResolver implementation.
 func (r *Resolver) Film() generated.FilmResolver { return &filmResolver{r} }
 
 type filmResolver struct{ *Resolver }

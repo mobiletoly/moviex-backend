@@ -6,11 +6,10 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/mobiletoly/moviex-backend/internal/apigateway/internal/adapters/primary/apiserver/generated"
+	"github.com/mobiletoly/moviex-backend/internal/apigateway/internal/adapters/primary/apiserver/graph"
 	"github.com/mobiletoly/moviex-backend/internal/apigateway/internal/di"
-	"github.com/mobiletoly/moviex-backend/internal/apigateway/internal/graph"
-	"github.com/mobiletoly/moviex-backend/internal/apigateway/internal/graph/generated"
 	"github.com/mobiletoly/moviex-backend/internal/common/requestid"
-	"github.com/mobiletoly/moviex-backend/internal/common/service"
 	"github.com/sirupsen/logrus"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 	"net/http"
@@ -34,7 +33,7 @@ func newAPIRoutes(mux *http.ServeMux, di *di.DI) {
 		return err
 	})
 	graphqlSrv.Use(LogrusExtension{Logger: logrus.NewEntry(logrus.StandardLogger())})
-	queryMiddleware := service.DefaultHTTPHeadersMiddleware(graphqlSrv)
+	queryMiddleware := DefaultHTTPHeadersMiddleware(graphqlSrv)
 	queryMiddleware = requestid.HTTPHandler(queryMiddleware)
 
 	mux.Handle("/", playground.Handler("GraphQL playground", "/query"))

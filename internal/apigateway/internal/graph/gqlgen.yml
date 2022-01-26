@@ -4,23 +4,18 @@ schema:
 
 # Where should the generated server code go?
 exec:
-  filename: ./generated/generated.go
+  filename: ../adapters/primary/apiserver/generated/generated.go
   package: generated
-
-# Uncomment to enable federation
-# federation:
-#   filename: graph/generated/federation.go
-#   package: generated
 
 # Where should any generated models go?
 model:
-  filename: ./model/models_gen.go
+  filename: ../core/model/models_gen.go
   package: model
 
 # Where should the resolver implementations go?
 resolver:
   layout: follow-schema
-  dir: .
+  dir: ../adapters/primary/apiserver/graph
   package: graph
 
 # Optional: turn on use `gqlgen:"fieldName"` tags in your models
@@ -35,7 +30,7 @@ resolver:
 # gqlgen will search for any type names in the schema in these go packages
 # if they match it will use them, otherwise it will generate them.
 autobind:
-  - "github.com/mobiletoly/moviex-backend/internal/apigateway/core/graph/model"
+  - "github.com/mobiletoly/moviex-backend/internal/apigateway/core/model"
 
 # This section declares type mapping between the GraphQL and go type systems
 #

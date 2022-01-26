@@ -20,6 +20,7 @@ func Serve(listenAddr string, di *di.DI) {
 	}
 	s := grpc.NewServer(grpc.UnaryInterceptor(defaultInterceptor))
 	pb.RegisterFilmServer(s, di.FilmUseCase)
+	logrus.Info("Listening gRPC server: ", lis.Addr().String())
 	if err := s.Serve(lis); err != nil {
 		logrus.Fatal("failed to serve:", err)
 	}
