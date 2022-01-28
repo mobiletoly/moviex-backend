@@ -1,0 +1,21 @@
+replicaCount: 2
+
+image:
+  repository: ptolik/apigateway
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  name: apigateway
+  type: NodePort
+  externalPort: 8080
+  internalPort: 8080
+  replicas: 2
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 256Mi

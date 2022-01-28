@@ -42,5 +42,6 @@ func newAPIRoutes(mux *http.ServeMux, di *di.DI) {
 }
 
 func versionHandler(w http.ResponseWriter, _ *http.Request) {
-	_, _ = fmt.Fprintf(w, "version 0.1")
+	logrus.Debugln("/version request has been received")
+	_, _ = fmt.Fprintf(w, "version 0.1.0")
 }

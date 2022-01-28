@@ -18,7 +18,7 @@ Moviex is a template of Go based microservice infrastructure that you can use to
 To provide a very basic functionality I decided to build a relatively simple Moviex application that allows
 external clients to fetch for film descriptions and perform some basic queries.
 I try not to use any fancy libraries and use a very minimalistic approach with as smallest number of dependencies
-as possible. This README is structured as a tutorial way so please follow the flow. Not only it explains a code
+as possible. This README is structured as a tutorial so please follow the flow. Not only it explains a code
 structure, but also how to deploy your code to kubernetes.
 
 Here is a high level overview of what you can expect to see in this code.
@@ -44,6 +44,20 @@ that is shared amongst multiple microservices. It is simple but efficient way to
 our code in a way that it is easier to wire and pass dependencies around.
 <br><br>
 - Kubernetes setup to deploy application to kubernetes cluster
+
+
+```
+                              Kubernetes (not necessary)
+                           +------------------------------------------------------------------
+                           |
+client -----(GraphQL)------|--> [API Gateway service] --(gRPC)--> [User service]
+                           |       |                                      .
+                           |       |                                      .
+                           |       |                                      .
+                           |       +--(gRPC)--> [Film service] . . . [PostgreSQL database] 
+                           |   
+```
+ 
 
 # Pre-requisites
 
@@ -250,7 +264,7 @@ it will run PostgreSQL with default login "postgres" and password "postgres" on 
 created.
 
 Note that while we have a single database for a multiple microservices, but our database has few
-schemas and each service has access ownly to its own schema. You can easily change this and point
+schemas and each service has access ownly to its own database schema. You can easily change this and point
 our services to access different databases, all you have to do is to open service config file
 and change parameters. For example, for Film Service you should open */config/filmsrv/config-local.yaml*/<br>
 By default it is going to look like:
@@ -346,7 +360,8 @@ $ FILMSRV_DATABASE_USER=postgres FILMSRV_DATABASE_PASSWORD=postgres FILMSRV_DATA
 
 # Build and deploy to kubernetes
 
-For local kubernetes deployment we want to use minikube. Please read up on what is minikube and how to install it.
+For local kubernetes deployment we want to use minikube. Please read up on what is minikube and how to install 
+and run it (unless you are planning to run it directly in a cloud).
 
 ## Database helm
 
@@ -373,10 +388,10 @@ $ kubectl create configmap db-init-schema --from-file=deploy/docker/moviex-db/in
 Here we upload SQL script into config map with key name db-init-schema. You can check that operation was successful
 by running `kubectl get configmaps`.
 
-Next let's install and run postgresql helm chart:
+Next let's install and run postgresql with helm chart:
 
 ```shell
-$ helm install postgresql bitnami/postgresql \
+$ helm install my-postgresql bitnami/postgresql \
     --set postgresqlUsername=postgres \
     --set postgresqlDatabase=moviex \
     --set postgresqlPostgresPassword=postgres \
@@ -448,4 +463,43 @@ $ kubectl run access-client --rm --tty -i --restart='Never' --namespace default 
 
 and once it is launched and you see remote shell, you can probe a service and a postgres port such, such as
 `telnet my-postgresql 5432`. If you see that telnet is successfully connected, you can exit, everything seems
-to be working great at this stage.
+to be working great at this point.
+
+## Deploying services
+
+Now we are ready to deploy all 3 of our services (API Gateway, Film service, User service) to kubernetes. For this
+we have a Helm chart in `deploy/helm` directory. Will start with building docker image for our services (don't
+forget to replace DOCKER_USERNAME to your actual username registered in Docker Hub), then we will push it
+to Docker Hub
+
+```shell
+$ docker build -f deploy/docker/apigateway/Dockerfile -t DOCKER_USERNAME/apigateway:latest .
+$ docker push ptolik/apigateway
+```
+
+For now we will be dealing with `latest` tag instead of versions, makes it easier for us to develop and test.
+
+Now it is time to deploy to kubernetes cluster:
+
+```shell
+$ helm install apigateway ./deploy/helm/
+```
+
+This is it, services are deployed and ready to be used. Now if we run `kubectl get all` we should see XXXXXXXXXX
+XXXXX
+
+
+
+
+
+
+We can try to check a connection with API Gateway from within a cluster. Let's create busybox pod inside a Kubernetes
+cluster and perform a simple HTTP GET request to our API Gateway:
+
+```shell
+$ kubectl run access-client --rm --tty -i --restart='Never' --namespace default --image busybox --command -- sh
+```
+Once pod is created and we are inside:
+```shell
+# wget -qO- http://apigateway-moviex-backend:8080/version
+```
