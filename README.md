@@ -14,37 +14,46 @@
 
 # Introduction
 
-Moviex is a template of Go based microservice infrastructure that you can use to start your own project.
+Moviex is an example of Go based microservice code and infrastructure that you can use to start your own project.
 To provide a very basic functionality I decided to build a relatively simple Moviex application that allows
-external clients to fetch for film descriptions and perform some basic queries.
-I try not to use any fancy libraries and use a very minimalistic approach with as smallest number of dependencies
+external clients to fetch for movie descriptions and perform some basic queries.
+We try not to use any fancy libraries and use a very minimalistic approach with as smallest number of dependencies
 as possible. This README is structured as a tutorial so please follow the flow. Not only it explains a code
-structure, but also how to deploy your code to kubernetes.
+structure, but also how to build docker images and deploy your code to kubernetes.
 
-Here is a high level overview of what you can expect to see in this code.
+Here is a high-level overview of what you can expect to see in this code.
 
 - Example of API Gateway microservice that acts as a publicly facing microservice. It provides GraphQL interface
-(I use a great gqlgen library for this) to communicate with external clients. API Gateway is a thin
+(we use a great gqlgen library for this) to communicate with external clients. API Gateway is a thin
 service and its only job is to properly redirect requests to other microservices and properly handle and
 federate responses received from business-logic microservices. Note that while API Gateway uses GraphQL to
-interface with the outside world, but to communicate with other Moviex microservices - it uses gRPC.
-- Also we have two simple business-logic microservices - Film Service and User Service. Film Service takes care of 
-providing access to films and actors database, while User Service keeps user login information and very simple film
-list of purchased movies.
-- We use PostgreSQL database to store films and users. Go's sqlx library is used for this. Sample database is
-provided and bootstrapped if needed when docker is launched.
-- We use a hexagonal architecture (ports and adapters) to structure our app. I strongly encourage developer to
-read up about hexagonal architecture, env if I tried to simplify it for our Go project to make sure that we don't
-have any unnecessary abstractions and have a reasonable number of layers and data entities.
-- Moviex supports Request Id provided by caller to API Gateway via HTTP header or auto-generated in case if not
-provided by caller. It is passed all the way from API Gateway to other microservices to ensure that we can properly
-track code flow, errors etc separately per each request. logrus logger that we use is set up to print request id
-that is shared amongst multiple microservices. It is simple but efficient way to troubleshoot distributed calls.
-- Very simple dependency injection patterns are used. We don't use any special libraries for this, just structure
-our code in a way that it is easier to wire and pass dependencies around.
-<br><br>
-- Kubernetes setup to deploy application to kubernetes cluster
+interface with the outside world, but to communicate with other Moviex microservices - it uses gRPC. If you
+don't care about GraphQL - it will be very easy for you to swap GraphQL to REST.
 
+- In addition to API Gateway service we have two simple business-logic microservices - Film Service and User Service.
+Film Service takes care of providing access to film and actor database, while User Service keeps user login information
+and simple list of purchased films.
+
+- We use PostgreSQL database to store films and users. Go's sqlx library is used for this. Sample data are
+provided and bootstrapped if needed when we run PostgreSQL.
+
+- We use a hexagonal architecture (ports and adapters) to structure our app. I strongly encourage developer to
+read about hexagonal architecture, it really helps to structure our Go projects. But keep in mind that in Go
+we try to avoid unnecessary level of abstractions, and it is reflected in this code - hexagonal architecture
+is pretty "lightweight" here.
+
+- Moviex supports Request Id provided by caller to API Gateway via HTTP header or auto-generated in case it is not
+provided by caller. It is passed all the way from API Gateway to other microservices to ensure that we can properly
+track code flow and errors per each request. logrus logger that we use is set up to print request id
+that is shared amongst multiple microservices. It is simple but efficient way to troubleshoot distributed calls.
+
+- Very simple dependency injection patterns are used. We don't use any libraries for this, just structure
+our code in a way that it is easier to wire and pass dependencies around.
+
+- We provided docker files to create service images as well as Helm chart to deploy our code to Kubernetes. Everything
+is simplified to make it easy to understand.
+
+#### Client/Server architecture
 
 ```
                               Kubernetes (not necessary)
@@ -57,16 +66,17 @@ client -----(GraphQL)------|--> [API Gateway service] --(gRPC)--> [User service]
                            |       +--(gRPC)--> [Film service] . . . [PostgreSQL database] 
                            |   
 ```
- 
+
 
 # Pre-requisites
 
-Obviously you need Go tools to be available on your computer: https://go.dev/doc/install
+- You need Go tools to be available on your computer: https://go.dev/doc/install
 
-- Out Moviex code requires **protobuf** compiler to generate Go files from protobuf schemas. Follow this link to find out how
+
+- Moviex code requires **protobuf** compiler to generate Go files from protobuf schemas. Follow this link to find out how
 to install protobuf on your computer: https://grpc.io/docs/languages/go/quickstart/ <br>
 If you are on Mac and have brew install you can easily do it by entering this commands:
-    ```
+    ```shell
     $ brew install protobuf
     $ go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
     $ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
@@ -255,8 +265,7 @@ database instance running - you can restore this backup to your own database, bu
 approach is to use a docker-compose. In your terminal:
 
 ```
-$ cd deploy/docker/moviex-db
-$ docker-compose up
+$ docker-compose -f deploy/docker/moviex-db/docker-compose.yml up
 ```
 
 it will run PostgreSQL with default login "postgres" and password "postgres" on port 5432. also
@@ -274,12 +283,12 @@ database:
     host: 127.0.0.1
     port: 5432
     name: moviex
-    user:
-    password:
+    user: _
+    password: _
     sslmode: disable
 ```
 
-Note that `user` and `password` fields are empty. You can put your username and password here,
+Note that `user` and `password` fields are empty (`_`). You can put your username and password here,
 but usually it is not a good idea. Instead this code allows you to override database parameters
 (or any other parameters that can be added in config file) by using environment variables with
 syntax such as "SERVICE_CONFIGNODE_CONFIGNAME" in all-capital letters form, e.g. to change 
@@ -295,27 +304,27 @@ in the menu and add few new **Go Build** tasks:
 
 - Name: `apigateway`
 
-  Package: `github.com/mobiletoly/moviex-backend/cmd/apigateway`<br>
+  Package: `github.com/mobiletoly/moviex-backend/cmd/apigateway`
 
-  Program arguments: `server --port=8080`
+  Program arguments: `server --deployment=local`
 
 
 - Name: `filmsrv`
 
   Package: `github.com/mobiletoly/moviex-backend/cmd/filmsrv`
 
-  Program arguments: `server --port=8081`
+  Program arguments: `server --deployment=local`
 
-  Environment: `FILMSRV_DATABASE_USER=postgres;FILMSRV_DATABASE_PASSWORD=postgres;FILMSRV_DATABASE_SSLMODE=disable`
+  Environment: `FILMSRV_DATABASE_USER=postgres;FILMSRV_DATABASE_PASSWORD=postgres;`
 
 
 - Name: `usersrv`
 
   Package: `github.com/mobiletoly/moviex-backend/cmd/usersrv`
 
-  Program arguments: `server --port=8082`
+  Program arguments: `server --deployment=local`
 
-  Environment: `USERSRV_DATABASE_USER=postgres;USERSRV_DATABASE_PASSWORD=postgres;USERSRV_DATABASE_SSLMODE=disable`
+  Environment: `USERSRV_DATABASE_USER=postgres;USERSRV_DATABASE_PASSWORD=postgres;`
 
 
 As we already mentioned, using a special conventions for environment variables, you can override
@@ -345,17 +354,17 @@ them directly.
 E.g. to run API Gateway, run this command:
 
 ```
-$ ./apigateway server --port=8080
+$ ./apigateway server --deployment=local
 ```
 
 To run Film and User service: 
 
 ```
-$ FILMSRV_DATABASE_USER=postgres FILMSRV_DATABASE_PASSWORD=postgres FILMSRV_DATABASE_SSLMODE=disable ./filmsrv server --port=8081
+$ FILMSRV_DATABASE_USER=postgres FILMSRV_DATABASE_PASSWORD=postgres ./filmsrv server --deployment=local
 ```
 
 ```
-$ FILMSRV_DATABASE_USER=postgres FILMSRV_DATABASE_PASSWORD=postgres FILMSRV_DATABASE_SSLMODE=disable ./usersrv server --port=8082
+$ FILMSRV_DATABASE_USER=postgres FILMSRV_DATABASE_PASSWORD=postgres ./usersrv server --deployment=local
 ```
 
 # Build and deploy to kubernetes
@@ -363,11 +372,14 @@ $ FILMSRV_DATABASE_USER=postgres FILMSRV_DATABASE_PASSWORD=postgres FILMSRV_DATA
 For local kubernetes deployment we want to use minikube. Please read up on what is minikube and how to install 
 and run it (unless you are planning to run it directly in a cloud).
 
+We decided not to add all dependencies into a single helm deployment, instead split process into two steps -
+deployment of PostgreSQL and deployment of all three services - API gateway, Film Service, and User Service.
+
 ## Database helm
 
-Let's start installing dependencies and applications. First what we want to deploy is PostgreSQL (we will be using
-bitnami deployment). Note that this is not going to be a production set up, and it will up to you to have a
-properly configured PostgreSQL instances. To do so you have multiple options, e.g. to properly setup Bitnami PostgreSQL
+Let's start with PostgreSQL (we will be using bitnami deployment). Note that this is not going to be a production
+set up, and it will up to you to have a properly configured PostgreSQL instances. To do so you have multiple options,
+e.g. to properly setup Bitnami PostgreSQL
 (https://engineering.bitnami.com/articles/create-a-production-ready-postgresql-cluster-bitnami-kubernetes-and-helm.html),
 use AWS RDS etc.
 
@@ -427,7 +439,7 @@ properly removed. You can try to uninstall it fully and delete all leftovers (th
 you want to start everything from scratch):
 
 ```
-$ helm uninstall postgresql
+$ helm uninstall my-postgresql
 $ kubectl delete pvc -l app.kubernetes.io/name=postgresql
 ```
 
@@ -465,16 +477,20 @@ and once it is launched and you see remote shell, you can probe a service and a 
 `telnet my-postgresql 5432`. If you see that telnet is successfully connected, you can exit, everything seems
 to be working great at this point.
 
-## Deploying services
+## Deploying microservices
 
-Now we are ready to deploy all 3 of our services (API Gateway, Film service, User service) to kubernetes. For this
+Now we are ready to deploy all 3 services (API Gateway, Film service, User service) to kubernetes. For this
 we have a Helm chart in `deploy/helm` directory. Will start with building docker image for our services (don't
-forget to replace DOCKER_USERNAME to your actual username registered in Docker Hub), then we will push it
+forget to replace `DOCKER_USERNAME` to your actual username registered in Docker Hub), then we will push it
 to Docker Hub
 
 ```shell
 $ docker build -f deploy/docker/apigateway/Dockerfile -t DOCKER_USERNAME/apigateway:latest .
 $ docker push ptolik/apigateway
+$ docker build -f deploy/docker/filmsrv/Dockerfile -t DOCKER_USERNAME/filmsrv:latest .
+$ docker push ptolik/filmsrv
+$ docker build -f deploy/docker/usersrv/Dockerfile -t DOCKER_USERNAME/usersrv:latest .
+$ docker push ptolik/usersrv
 ```
 
 For now we will be dealing with `latest` tag instead of versions, makes it easier for us to develop and test.
@@ -482,16 +498,10 @@ For now we will be dealing with `latest` tag instead of versions, makes it easie
 Now it is time to deploy to kubernetes cluster:
 
 ```shell
-$ helm install apigateway ./deploy/helm/
+$ helm install moviex ./deploy/helm/ --set database.user=postgres --set database.password=postgres
 ```
 
-This is it, services are deployed and ready to be used. Now if we run `kubectl get all` we should see XXXXXXXXXX
-XXXXX
-
-
-
-
-
+This is it, services are deployed and ready to be used. Now if we run `kubectl get all` we should see 
 
 We can try to check a connection with API Gateway from within a cluster. Let's create busybox pod inside a Kubernetes
 cluster and perform a simple HTTP GET request to our API Gateway:

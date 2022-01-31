@@ -1,8 +1,13 @@
 package app
 
 type Config struct {
-	FilmSrv *ServiceConfig
-	UserSrv *ServiceConfig
+	Server  ServerConfig
+	FilmSrv ServiceConfig
+	UserSrv ServiceConfig
+}
+
+type ServerConfig struct {
+	Port uint16
 }
 
 type ServiceConfig struct {

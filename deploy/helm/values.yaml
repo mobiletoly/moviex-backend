@@ -1,21 +1,46 @@
-replicaCount: 2
+database:
+  user: _
+  password: _
 
-image:
-  repository: ptolik/apigateway
-  tag: latest
-  pullPolicy: IfNotPresent
+apigatewayService:
+  replicaCount: 2
+  envPrefix: APIGATEWAY
+  image:
+    repository: ptolik/apigateway
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    name: apigateway
+    type: NodePort
+    externalPort: 8080
+    internalPort: 8080
+  resources:
+    limits:
+      cpu: 100m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
 
-service:
-  name: apigateway
-  type: NodePort
-  externalPort: 8080
-  internalPort: 8080
-  replicas: 2
-
-resources:
-  limits:
-    cpu: 100m
-    memory: 256Mi
-  requests:
-    cpu: 100m
-    memory: 256Mi
+grpcServices:
+  filmService:
+    replicaCount: 2
+    envPrefix: FILMSRV
+    image:
+      repository: ptolik/filmsrv
+      tag: latest
+      pullPolicy: IfNotPresent
+    service:
+      name: filmsrv
+      type: ClusterIP
+      externalPort: 8080
+      internalPort: 8080
+    livenessProbe:
+    readinessProbe:
+    resources:
+      limits:
+        cpu: 100m
+        memory: 256Mi
+      requests:
+        cpu: 100m
+        memory: 256Mi

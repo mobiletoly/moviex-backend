@@ -1,9 +1,9 @@
-server:
-    port: 8082
 database:
-    host: 127.0.0.1
+    host: my-postgresql
     port: 5432
     name: moviex
     user: _
     password: _
     sslmode: disable
+server:
+    port: 8080

@@ -1,0 +1,9 @@
+services:
+    filmsrv:
+        host: moviex-backend-filmsrv
+        port: 8080
+    usersrv:
+        host: moviex-backend-usersrv
+        port: 8080
+server:
+    port: 8080

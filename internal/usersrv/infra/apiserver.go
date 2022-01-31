@@ -11,7 +11,7 @@ import (
 
 var appPackage = "github.com/mobiletoly/moviex-backend/"
 
-func RunAPIServer(port int) {
+func RunAPIServer(deployment string) {
 	logrus.SetLevel(logrus.DebugLevel)
 	logrus.SetReportCaller(true)
 	logrus.SetFormatter(&logrus.TextFormatter{
@@ -21,8 +21,8 @@ func RunAPIServer(port int) {
 		},
 	})
 
-	listenAddr := fmt.Sprintf(":%d", port)
-	appConfig := appconfig.Load()
-	di := WireDependencies(appConfig)
+	cfg := appconfig.Load(deployment)
+	di := WireDependencies(cfg)
+	listenAddr := fmt.Sprintf(":%d", cfg.Server.Port)
 	apiserver.Serve(listenAddr, di)
 }

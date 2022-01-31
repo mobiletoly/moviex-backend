@@ -10,17 +10,19 @@ import (
 	pb "github.com/mobiletoly/moviex-backend/internal/proto"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 type filmAdapter struct {
-	config     *app.Config
-	filmClient pb.FilmClient
+	config       *app.Config
+	filmClient   pb.FilmClient
+	closeHandler func() error
 }
 
 func NewFilmAdapter(config *app.Config) (outport.FilmRemoting, error) {
 	addr := fmt.Sprintf("%s:%d", config.FilmSrv.Host, config.FilmSrv.Port)
 	logrus.Infoln("create Film service client:", addr)
-	conn, err := grpc.Dial(addr, grpc.WithInsecure())
+	conn, err := grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, fmt.Errorf("failed creating Film client connection: %w", err)
 	}
@@ -28,7 +30,15 @@ func NewFilmAdapter(config *app.Config) (outport.FilmRemoting, error) {
 	return &filmAdapter{
 		config:     config,
 		filmClient: filmClient,
+		closeHandler: func() error {
+			logrus.Infoln("close Film service")
+			return conn.Close()
+		},
 	}, nil
+}
+
+func (impl filmAdapter) Close() error {
+	return impl.closeHandler()
 }
 
 func (impl filmAdapter) FetchFilms(ctx context.Context, page *model.PageReqParams) (*model.FilmPage, error) {
@@ -55,7 +65,7 @@ func (impl filmAdapter) FetchCategory(ctx context.Context, id int32) (*model.Cat
 	req := pb.GetCategoryRequest{Id: id}
 	resp, err := impl.filmClient.GetCategory(callCtx, &req)
 	if err != nil {
-		return nil, fmt.Errorf("failed fetching category: %w", err)
+		return nil, fmt.Errorf("failed fetching category by id=%d: %w", id, err)
 	}
 	m := mapper.FetchCategoryResponseToModel(resp)
 	return m, nil
@@ -66,7 +76,7 @@ func (impl filmAdapter) FetchCategoryByFilmID(ctx context.Context, id int32) (*m
 	req := pb.GetByFilmIdRequest{Id: id}
 	resp, err := impl.filmClient.GetCategoryByFilmID(callCtx, &req)
 	if err != nil {
-		return nil, fmt.Errorf("failed fetching category by film id: %w", err)
+		return nil, fmt.Errorf("failed fetching category by film id=%d: %w", id, err)
 	}
 	m := mapper.FetchCategoryResponseToModel(resp)
 	return m, nil
@@ -77,7 +87,7 @@ func (impl filmAdapter) FetchActor(ctx context.Context, id int32) (*model.Actor,
 	req := pb.GetActorRequest{Id: id}
 	resp, err := impl.filmClient.GetActor(callCtx, &req)
 	if err != nil {
-		return nil, fmt.Errorf("failed fetching actor: %w", err)
+		return nil, fmt.Errorf("failed fetching actor by id=%d: %w", id, err)
 	}
 	m := mapper.FetchActorResponseToModel(resp)
 	return m, nil

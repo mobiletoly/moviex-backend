@@ -9,4 +9,6 @@ type DI struct {
 	AppConfig   *app.Config
 	FilmUseCase *usecase.Film
 	UserUseCase *usecase.User
+
+	Close func() error
 }

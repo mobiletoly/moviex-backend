@@ -5,9 +5,10 @@ import (
 	"github.com/mobiletoly/moviex-backend/internal/apigateway/internal/core/app"
 )
 
-func Load() *app.Config {
-	rawCfg := internal.LoadAppConfig()
+func Load(deployment string) *app.Config {
+	rawCfg := internal.LoadAppConfig(deployment)
 	return &app.Config{
+		Server:  rawCfg.Server.ParseServerConfig(),
 		FilmSrv: rawCfg.Services.FilmSrv.ParseServiceConfig(),
 		UserSrv: rawCfg.Services.UserSrv.ParseServiceConfig(),
 	}

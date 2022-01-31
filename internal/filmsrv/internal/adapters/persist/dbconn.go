@@ -13,6 +13,7 @@ type dbConnector struct {
 
 func NewDBConnector(cfg *app.Config) outport.DBConnector {
 	db := cfg.DB.Connect()
+	db.SetMaxOpenConns(10)
 	return &dbConnector{db: db}
 }
 

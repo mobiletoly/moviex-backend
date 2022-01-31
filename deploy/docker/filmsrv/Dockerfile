@@ -15,5 +15,5 @@ COPY --chown=65534:65534 --from=builder /app/filmsrv .
 COPY --chown=65534:65534 --from=builder /app/configs/filmsrv ./configs/filmsrv
 USER 65534
 #
-EXPOSE 8081
-ENTRYPOINT [ "./filmsrv", "server", "--port=8081" ]
+EXPOSE 8080
+ENTRYPOINT [ "./filmsrv", "server", "--deployment=k8s" ]

@@ -22,9 +22,16 @@ func WireDependencies(cfg *app.Config) *di.DI {
 	filmUseCase := usecase.NewFilmUseCase(cfg, filmAdapter)
 	userUseCase := usecase.NewUserUseCase(cfg, userAdapter)
 
+	cleanupCallback := func() error {
+		_ = filmAdapter.Close()
+		_ = userAdapter.Close()
+		return nil
+	}
+
 	return &di.DI{
 		AppConfig:   cfg,
 		FilmUseCase: filmUseCase,
 		UserUseCase: userUseCase,
+		Close:       cleanupCallback,
 	}
 }

@@ -1,15 +1,37 @@
+{{- with .Values.apigatewayService }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "moviex.servicename" (dict "root" $ "microService" .) }}
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+    chart: "{{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}"
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .service.type }}
   ports:
-    - port: {{ .Values.service.externalPort }}
-      targetPort: {{ .Values.service.internalPort }}
+    - port: {{ .service.externalPort }}
+      targetPort: {{ .service.internalPort }}
       protocol: TCP
-      name: {{ .Values.service.name }}
+      name: {{ .service.name }}
   selector:
-      app: {{ template "fullname" . }}
+    app: {{ template "moviex.servicename" (dict "root" $ "microService" .) }}
+---
+{{- end }}
+
+{{- range $.Values.grpcServices }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "moviex.servicename" (dict "root" $ "microService" .) }}
+  labels:
+    chart: "{{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}"
+spec:
+  type: {{ .service.type }}
+  ports:
+    - port: {{ .service.externalPort }}
+      targetPort: {{ .service.internalPort }}
+      protocol: TCP
+      name: {{ .service.name }}
+  selector:
+      app: {{ template "moviex.servicename" (dict "root" $ "microService" .) }}
+---
+{{- end }}

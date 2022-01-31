@@ -1,32 +1,79 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "moviex.servicename" (dict "root" $ "microService" .Values.apigatewayService) }}
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+    chart: "{{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}"
 spec:
   selector:
     matchLabels:
-      app: {{ template "fullname" . }}
-  replicas: {{ .Values.replicaCount }}
+      app: {{ template "moviex.servicename" (dict "root" $ "microService" .Values.apigatewayService) }}
+  replicas: {{ .Values.apigatewayService.replicaCount }}
   template:
     metadata:
       labels:
-        app: {{ template "fullname" . }}
+        app: {{ template "moviex.servicename" (dict "root" $ "microService" .Values.apigatewayService) }}
     spec:
       containers:
-        - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+        - name: {{ $.Chart.Name }}
+          securityContext:
+            {{- toYaml $.Values.securityContext | nindent 12 }}
+          image: "{{ .Values.apigatewayService.image.repository }}:{{ .Values.apigatewayService.image.tag }}"
+          imagePullPolicy: {{ .Values.apigatewayService.image.pullPolicy }}
           ports:
-            - containerPort: {{ .Values.service.internalPort }}
+            - containerPort: {{ .Values.apigatewayService.service.internalPort }}
           livenessProbe:
             httpGet:
               path: /version
-              port: {{ .Values.service.internalPort }}
+              port: {{ .Values.apigatewayService.service.externalPort }}
           readinessProbe:
             httpGet:
               path: /version
-              port: {{ .Values.service.internalPort }}
+              port: {{ .Values.apigatewayService.service.externalPort }}
           resources:
-{{ toYaml .Values.resources | indent 12 }}
+{{ toYaml .Values.apigatewayService.resources | indent 12 }}
+---
+
+{{- range $.Values.grpcServices }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "moviex.servicename" (dict "root" $ "microService" .) }}
+  labels:
+    chart: "{{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}"
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "moviex.servicename" (dict "root" $ "microService" .) }}
+  replicas: {{ .replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "moviex.servicename" (dict "root" $ "microService" .) }}
+    spec:
+      containers:
+        - name: {{ $.Chart.Name }}
+          image: "{{ .image.repository }}:{{ .image.tag }}"
+          imagePullPolicy: {{ .image.pullPolicy }}
+          env:
+            - name: {{ .envPrefix }}_DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  key: databaseUser
+                  name: {{ $.Release.Name }}-auth
+            - name: {{ .envPrefix }}_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: databasePassword
+                  name: {{ $.Release.Name }}-auth
+          ports:
+            - containerPort: {{ .service.internalPort }}
+          livenessProbe:
+{{ toYaml .livenessProbe | indent 12 }}
+          readinessProbe:
+{{ toYaml .readinessProbe | indent 12 }}
+          resources:
+{{ toYaml .resources | indent 12 }}
+
+---
+{{- end }}

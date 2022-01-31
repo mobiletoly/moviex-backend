@@ -5,3 +5,5 @@ database:
     user: _
     password: _
     sslmode: disable
+server:
+    port: 8081

@@ -11,8 +11,10 @@ type FilmRemoting interface {
 	FetchCategoryByFilmID(ctx context.Context, id int32) (*model.Category, error)
 	FetchActor(ctx context.Context, id int32) (*model.Actor, error)
 	FetchActorsByFilmID(ctx context.Context, id int32) ([]*model.Actor, error)
+	Close() error
 }
 
 type UserRemoting interface {
 	FetchUsers(ctx context.Context, page *model.PageReqParams) (*model.UserPage, error)
+	Close() error
 }

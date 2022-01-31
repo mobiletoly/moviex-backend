@@ -9,20 +9,27 @@ import (
 var envVarPrefix = "USERSRV"
 
 type RawAppConfig struct {
-	Database struct {
-		Host     string
-		Port     uint16
-		Name     string
-		User     string
-		Password string
-		SslMode  string
-	}
+	Server   RawAppServerConfig
+	Database RawAppDatabaseConfig
 }
 
-func LoadAppConfig() RawAppConfig {
+type RawAppDatabaseConfig struct {
+	Host     string
+	Port     uint16
+	Name     string
+	User     string
+	Password string
+	SslMode  string
+}
+
+type RawAppServerConfig struct {
+	Port uint16
+}
+
+func LoadAppConfig(deployment string) *RawAppConfig {
 	v := viper.New()
 	applyEnvVariables(v)
-	v.SetConfigName("config-local")
+	v.SetConfigName("config-" + deployment)
 	v.SetConfigType("yaml")
 	v.AddConfigPath("./configs/usersrv")
 	err := v.ReadInConfig()
@@ -34,7 +41,7 @@ func LoadAppConfig() RawAppConfig {
 	if err != nil {
 		logrus.Fatalln("error parsing configuration file:", err)
 	}
-	return rawCfg
+	return &rawCfg
 }
 
 func applyEnvVariables(v *viper.Viper) {

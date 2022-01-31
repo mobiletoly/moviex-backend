@@ -9,20 +9,27 @@ import (
 var envVarPrefix = "FILMSRV"
 
 type RawAppConfig struct {
-	Database struct {
-		Host     string
-		Port     uint16
-		Name     string
-		User     string
-		Password string
-		SslMode  string
-	}
+	Server   RawAppServerConfig
+	Database RawAppDatabaseConfig
 }
 
-func LoadAppConfig() RawAppConfig {
+type RawAppDatabaseConfig struct {
+	Host     string
+	Port     uint16
+	Name     string
+	User     string
+	Password string
+	SslMode  string
+}
+
+type RawAppServerConfig struct {
+	Port uint16
+}
+
+func LoadAppConfig(deployment string) RawAppConfig {
 	v := viper.New()
 	applyEnvVariables(v)
-	v.SetConfigName("config-local")
+	v.SetConfigName("config-" + deployment)
 	v.SetConfigType("yaml")
 	v.AddConfigPath("./configs/filmsrv")
 	err := v.ReadInConfig()

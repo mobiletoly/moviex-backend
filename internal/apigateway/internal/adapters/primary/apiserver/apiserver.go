@@ -23,6 +23,7 @@ const gracefulShutdownTimeout = 10 * time.Second
 // Server provides an http.Server
 type Server struct {
 	*http.Server
+	ShutdownCallback func()
 }
 
 func NewAPIServer(listenAddr string, di *di.DI) *Server {
@@ -56,7 +57,9 @@ func NewAPIServer(listenAddr string, di *di.DI) *Server {
 		IdleTimeout:  15 * time.Second,
 	}
 
-	return &Server{Server: &srv}
+	return &Server{
+		Server: &srv,
+	}
 }
 
 // Start runs ListenAndServe on the http.Server with graceful shutdown
@@ -87,4 +90,6 @@ func (srv *Server) gracefulShutdown() {
 		logrus.Fatal("Could not gracefully shutdown the server / Reason: ", err.Error())
 	}
 	logrus.Info("Server stopped")
+
+	(srv.ShutdownCallback)()
 }

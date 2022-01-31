@@ -1,28 +1,13 @@
-{{/* vim: set filetype=mustache: */}}
-{{/*
-Expand the name of the chart.
-*/}}
-{{- define "name" -}}
+{{- define "moviex.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-*/}}
-{{- define "fullname" -}}
+{{- define "moviex.fullname" -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{/* vim: set filetype=mustache: */}}
-{{/*
-Return the appropriate apiVersion for deployment.
-*/}}
-{{- define "common.capabilities.deployment.apiVersion" -}}
-{{- if semverCompare "<1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "extensions/v1beta1" -}}
-{{- else -}}
-{{- print "apps/v1" -}}
-{{- end -}}
+{{- define "moviex.servicename" -}}
+{{- $base := default .root.Chart.Name .root.Values.nameOverride -}}
+{{- printf "%s-%s" $base .microService.service.name -}}
 {{- end -}}

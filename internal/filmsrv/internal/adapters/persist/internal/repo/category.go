@@ -18,7 +18,7 @@ func (r DBRepo) FetchCategoryByID(ctx context.Context, id int32) (*CategoryEntit
 	var cat CategoryEntity
 	err := r.db.GetContext(ctx, &cat, query, id)
 	if err != nil {
-		return nil, fmt.Errorf("error fetching category: %w", err)
+		return nil, fmt.Errorf("error fetching category by id=%d: %w", id, err)
 	}
 	return &cat, nil
 }
@@ -32,7 +32,7 @@ WHERE fcl.film_id = $1 LIMIT 1
 	var cat CategoryEntity
 	err := r.db.GetContext(ctx, &cat, query, id)
 	if err != nil {
-		return nil, fmt.Errorf("error fetching category: %w", err)
+		return nil, fmt.Errorf("error fetching category by id=%d: %w", id, err)
 	}
 	return &cat, nil
 }

@@ -6,18 +6,18 @@ import (
 )
 
 var (
-	port      int
-	serverCmd = &cobra.Command{
+	deployment string
+	serverCmd  = &cobra.Command{
 		Use:   "server",
 		Short: "Run API gateway server",
 		Run: func(cmd *cobra.Command, args []string) {
-			infra.RunAPIServer(port)
+			infra.RunAPIServer(deployment)
 		},
 	}
 )
 
 func init() {
-	serverCmd.Flags().IntVar(&port, "port", 0, "listening port for API gateway server")
-	_ = serverCmd.MarkFlagRequired("port")
+	serverCmd.Flags().StringVar(&deployment, "deployment", "local", "deployment environment for API gateway (e.g. local, k8s)")
+	_ = serverCmd.MarkFlagRequired("deployment")
 	rootCmd.AddCommand(serverCmd)
 }

@@ -25,6 +25,7 @@ LIMIT :limit OFFSET :offset`
 	if err != nil {
 		return nil, 0, fmt.Errorf("error fetching users: %w", err)
 	}
+	defer nstmt.Close()
 	err = nstmt.Select(&users, queryArgs)
 	if err != nil {
 		return nil, 0, fmt.Errorf("error selecting users: %w", err)

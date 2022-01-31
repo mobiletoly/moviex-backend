@@ -7,12 +7,15 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func RunAPIServer(port int) {
-	listenAddr := fmt.Sprintf(":%d", port)
+func RunAPIServer(deployment string) {
+	cfg := appconfig.Load(deployment)
+	di := WireDependencies(cfg)
 
-	appConfig := appconfig.Load()
-	di := WireDependencies(appConfig)
+	listenAddr := fmt.Sprintf(":%d", cfg.Server.Port)
 	srv := apiserver.NewAPIServer(listenAddr, di)
+	srv.ShutdownCallback = func() {
+		_ = di.Close()
+	}
 	logrus.Info("Starting API Gateway server...")
 	srv.Start()
 }

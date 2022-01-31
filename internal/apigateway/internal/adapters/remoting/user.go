@@ -10,25 +10,36 @@ import (
 	pb "github.com/mobiletoly/moviex-backend/internal/proto"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 type userAdapter struct {
-	config     *app.Config
-	userClient pb.UserClient
+	config       *app.Config
+	userClient   pb.UserClient
+	closeHandler func() error
 }
 
 func NewUserAdapter(config *app.Config) (outport.UserRemoting, error) {
 	addr := fmt.Sprintf("%s:%d", config.UserSrv.Host, config.UserSrv.Port)
 	logrus.Infoln("create User service client:", addr)
-	conn, err := grpc.Dial(addr, grpc.WithInsecure())
+	conn, err := grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, fmt.Errorf("error creating User client connection: %w", err)
 	}
 	userClient := pb.NewUserClient(conn)
-	return &userAdapter{
+	ua := &userAdapter{
 		config:     config,
 		userClient: userClient,
-	}, nil
+		closeHandler: func() error {
+			logrus.Infoln("close User service")
+			return conn.Close()
+		},
+	}
+	return ua, nil
+}
+
+func (impl userAdapter) Close() error {
+	return impl.closeHandler()
 }
 
 func (impl userAdapter) FetchUsers(ctx context.Context, page *model.PageReqParams) (*model.UserPage, error) {

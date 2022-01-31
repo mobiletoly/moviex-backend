@@ -15,5 +15,5 @@ COPY --chown=65534:65534 --from=builder /app/usersrv .
 COPY --chown=65534:65534 --from=builder /app/configs/usersrv ./configs/usersrv
 USER 65534
 #
-EXPOSE 8082
-ENTRYPOINT [ "./usersrv", "server", "--port=8082" ]
+EXPOSE 8080
+ENTRYPOINT [ "./usersrv", "server", "--deployment=k8s" ]

@@ -5,5 +5,10 @@ import (
 )
 
 type Config struct {
-	DB *dbc.DatabaseConfig
+	Server ServerConfig
+	DB     dbc.DatabaseConfig
+}
+
+type ServerConfig struct {
+	Port uint16
 }
