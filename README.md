@@ -10,7 +10,8 @@
     4. [Run as command-line applications](#run-as-command-line-applications)
 6. [Build and deploy to kubernetes](#build-and-deploy-to-kubernetes)
     1. [Database helm](#database-helm)
-7. 
+    2. [Microservices deployment](#microservices-deployment)
+7. [Access API Gateway](#access-api-gateway)
 
 # Introduction
 
@@ -91,8 +92,8 @@ If you are on Mac and have brew install you can easily do it by entering this co
   run a PostgreSQL database with initial data locally)
 
 
-- **minikube** is required if you plan to deploy this app to kubernetes locally. For Mac you can install it with
-
+- **minikube** is required if you plan to deploy this app to kubernetes locally. For Mac/BREW you can install it with
+`$ brew install minikube`. Make sure to run it with `$ minikube start` to launch a local cluster,
 
 - We use **helm** to simplify deployment of apps in kubernetes
 
@@ -477,7 +478,7 @@ and once it is launched and you see remote shell, you can probe a service and a 
 `telnet my-postgresql 5432`. If you see that telnet is successfully connected, you can exit, everything seems
 to be working great at this point.
 
-## Deploying microservices
+## Microservices deployment
 
 Now we are ready to deploy all 3 services (API Gateway, Film service, User service) to kubernetes. For this
 we have a Helm chart in `deploy/helm` directory. Will start with building docker image for our services (don't
@@ -495,15 +496,63 @@ $ docker push ptolik/usersrv
 
 For now we will be dealing with `latest` tag instead of versions, makes it easier for us to develop and test.
 
+**TIP:** if you want to avoid pushing images to Docker Hub and instead want to keep docker image locally
+(it is faster process and simplify redeployments), you can run `eval $(minikube -p minikube docker-env)` in your
+active terminal window. Now you can start using `docker build` without `docker push`. Remember to enter this command
+for every terminal session that you use (or when you open a new one).
+
 Now it is time to deploy to kubernetes cluster:
 
 ```shell
 $ helm install moviex ./deploy/helm/ --set database.user=postgres --set database.password=postgres
 ```
 
-This is it, services are deployed and ready to be used. Now if we run `kubectl get all` we should see 
+This is it, services are deployed and ready to be used. Now if we run `kubectl get all` we should see this output:
 
-We can try to check a connection with API Gateway from within a cluster. Let's create busybox pod inside a Kubernetes
+```shell
+NAME                                             READY   STATUS    RESTARTS   AGE
+pod/moviex-backend-apigateway-77f4d994c7-84pnk   1/1     Running   0          54m
+pod/moviex-backend-apigateway-77f4d994c7-mlmnr   1/1     Running   0          54m
+pod/moviex-backend-filmsrv-67f566c798-4v5xx      1/1     Running   0          54m
+pod/moviex-backend-filmsrv-67f566c798-l24h6      1/1     Running   0          54m
+pod/moviex-backend-usersrv-5749fc4cdd-9vw2f      1/1     Running   0          54m
+pod/moviex-backend-usersrv-5749fc4cdd-xjlnp      1/1     Running   0          54m
+pod/my-postgresql-postgresql-0                   1/1     Running   0          56m
+
+NAME                                TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+service/kubernetes                  ClusterIP   10.96.0.1        <none>        443/TCP          63m
+service/moviex-backend-apigateway   NodePort    10.101.133.166   <none>        8080:31849/TCP   54m
+service/moviex-backend-filmsrv      ClusterIP   10.96.49.104     <none>        8080/TCP         54m
+service/moviex-backend-usersrv      ClusterIP   10.97.26.152     <none>        8080/TCP         54m
+service/my-postgresql               ClusterIP   10.100.221.77    <none>        5432/TCP         56m
+service/my-postgresql-headless      ClusterIP   None             <none>        5432/TCP         56m
+
+NAME                                        READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/moviex-backend-apigateway   2/2     2            2           54m
+deployment.apps/moviex-backend-filmsrv      2/2     2            2           54m
+deployment.apps/moviex-backend-usersrv      2/2     2            2           54m
+
+NAME                                                   DESIRED   CURRENT   READY   AGE
+replicaset.apps/moviex-backend-apigateway-77f4d994c7   2         2         2       54m
+replicaset.apps/moviex-backend-filmsrv-67f566c798      2         2         2       54m
+replicaset.apps/moviex-backend-usersrv-5749fc4cdd      2         2         2       54m
+
+NAME                                        READY   AGE
+statefulset.apps/my-postgresql-postgresql   1/1     56m
+```
+
+As you can see - we have 2 pods per each microservice. Each set of microservices sits behind service. E.g. to call
+Film service from API Gateway - you will be using `http://moviex-backend-filmsrv:8080` endpoint and call will be routed
+to one of the `moviex-backend-filmsrv-...` pods. This is why our `/configs/apigateway/configs-k8s.yaml` contains
+configuration such as:
+```yaml
+services:
+  filmsrv:
+    host: moviex-backend-filmsrv
+    port: 8080
+```
+
+We can try to check connection with API Gateway from within a cluster. Let's create busybox pod inside a Kubernetes
 cluster and perform a simple HTTP GET request to our API Gateway:
 
 ```shell
@@ -512,4 +561,28 @@ $ kubectl run access-client --rm --tty -i --restart='Never' --namespace default 
 Once pod is created and we are inside:
 ```shell
 # wget -qO- http://apigateway-moviex-backend:8080/version
+# cat version
 ```
+it should print API Gateway service version (we have a very simple HTTP GET handler in our API Gateway code
+to return version and also in our helm chart we use it for liveness and readiness probe).
+
+# Access API Gateway
+
+Next step is to send GraphQL request to API Gateway service. If your have launched API gateway via IntelliJ or
+from command line, then your request URL will be `http://127.0.0.1:8080/query`. If you use minikube and have
+microservices already deployed, then one of the solutions could be to expose kubernetes port locally, e.g.
+```shell
+$ minikube service --url moviex-backend-apigateway
+```
+The output will be something like `http://127.0.0.1:52583` (some other random port will be used). Let's try to
+perform some GraphQL request to API Gateway to test API Gateway (as well as API Gateway's interacton with Film
+service).
+
+```shell
+$ curl --location --request POST 'http://127.0.0.1:52583/query' \
+--header 'Content-Type: application/json' \
+--data-raw '{"query":"query films($first: Int!, $after: String) {films(first: $first, after: $after) { totalCount pageInfo { hasNextPage endCursor } edges { node { id title category { id name lastUpdate } actors { id firstName lastName lastUpdate } } }}}","variables":{"first":10,"after":null}}'
+```
+
+If everything is OK, you will see JSON response with 10 films. cURL is probably not the best tool to author
+GraphQL requests, you can try some UI tools instead (I personally like Insomnia).

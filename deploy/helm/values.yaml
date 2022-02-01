@@ -44,3 +44,24 @@ grpcServices:
       requests:
         cpu: 100m
         memory: 256Mi
+  userService:
+    replicaCount: 2
+    envPrefix: USERSRV
+    image:
+      repository: ptolik/usersrv
+      tag: latest
+      pullPolicy: IfNotPresent
+    service:
+      name: usersrv
+      type: ClusterIP
+      externalPort: 8080
+      internalPort: 8080
+    livenessProbe:
+    readinessProbe:
+    resources:
+      limits:
+        cpu: 100m
+        memory: 256Mi
+      requests:
+        cpu: 100m
+        memory: 256Mi
