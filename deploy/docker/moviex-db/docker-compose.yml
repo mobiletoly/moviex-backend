@@ -10,7 +10,7 @@ services:
       PGDATA: /data/postgres
     volumes:
        - postgres:/data/postgres
-       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+       - ./init.sql:/docker-entrypoint-initdb.d/init.sql.gz
     ports:
       - "5432:5432"
     networks:

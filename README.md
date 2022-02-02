@@ -193,7 +193,7 @@ Overview:
 `.  |   | usersrv` - contains Dockerfile for User service<br>
 `.  |   | moviex-db` - database docker tools<br>
 `.  |   |   | docker-compose.yml` - to run PostgreSQL with docker compose<br>
-`.  |   |   | init.sql` - script to create database with initial data<br>
+`.  |   |   | init.sql.gz` - gzipped script to create database with initial data<br>
 
 `. internal/` - main code directory<br>
 `.  | common/` - common code in use by more than one service<br>
@@ -290,7 +290,7 @@ servers and use very similar architecture. we ski
 
 ## Database docker
 
-First step is to run a PostgreSQL database and import data that we have in `/deploy/docker/moviex-db/init.sql` file.
+First step is to run a PostgreSQL database and import data that we have in `/deploy/docker/moviex-db/init.sql.gz` file.
 This file contains dump of data with a sample of films, actors, categories. If you already have your own
 database instance running - you can restore this backup to your own instance, but probably the easiest
 approach is to use a docker-compose we have supplied. In terminal window enter:
@@ -300,7 +300,7 @@ $ docker-compose -f deploy/docker/moviex-db/docker-compose.yml up
 ```
 
 to run PostgreSQL with default login "postgres" and password "postgres" on port 5432. also
-`init.sql` will be executed and `moviex` database with some initial data will be
+`init.sql.gz` will be executed and `moviex` database with some initial data will be
 created.
 
 Note that while we have a single database for a multiple microservices, but our database has few
@@ -417,7 +417,7 @@ config map. This will provide us with some initial database table structures and
 Since we already have script in `/deploy/docker/moviex-db` directory - we will use it:
 
 ```shell
-$ kubectl create configmap db-init-schema --from-file=deploy/docker/moviex-db/init.sql
+$ kubectl create configmap db-init-schema --from-file=deploy/docker/moviex-db/init.sql.gz
 ```
 
 Here we uploaded SQL script into config map with key name `db-init-schema`. You can check that operation was
