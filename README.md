@@ -254,6 +254,7 @@ Overview:
 `.  |  | apiserver.go` - API server launcher<br>
 `.  |  | deps.go` - instantiate and wire dependencies<br>
 `.  | internal/`<br>
+`.  |  | adapters/` - primary and secondary adapters<br>
 `.  |  |  | appconfig/` - adapter to access service yaml configuration<br>
 `.  |  |  |  | internal/`<br>
 `.  |  |  |  |  | mapper` - mappers from yaml configs to core's **app.Config** struct<br>
