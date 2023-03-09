@@ -26,6 +26,7 @@ Here is a high-level overview of what you can expect to see in this code.
 
 - Example of API Gateway project that acts as a publicly facing microservice. It provides GraphQL interface
 (we use great `gqlgen` library to generate Go code from graphql schemas) to communicate with external clients.
+(we use great `gqlgen` library to generate Go code from graphql schemas) to communicate with external clients.
 API Gateway's only job is to properly redirect requests to other microservices and handle and federate responses
 received from business-logic microservices. Note that API Gateway uses GraphQL only to interact with the outside
 world, but to communicate with other Moviex microservices - it uses gRPC (with aim to great performance).
