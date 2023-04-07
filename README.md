@@ -502,11 +502,11 @@ to Docker Hub
 
 ```shell
 $ docker build -f deploy/docker/apigateway/Dockerfile -t DOCKER_USERNAME/apigateway:latest .
-$ docker push ptolik/apigateway
+$ docker push DOCKER_USERNAME/apigateway
 $ docker build -f deploy/docker/filmsrv/Dockerfile -t DOCKER_USERNAME/filmsrv:latest .
-$ docker push ptolik/filmsrv
+$ docker push DOCKER_USERNAME/filmsrv
 $ docker build -f deploy/docker/usersrv/Dockerfile -t DOCKER_USERNAME/usersrv:latest .
-$ docker push ptolik/usersrv
+$ docker push DOCKER_USERNAME/usersrv
 ```
 
 For now, we will be dealing with `latest` tag instead of versions, makes it easier for us to develop and test.
